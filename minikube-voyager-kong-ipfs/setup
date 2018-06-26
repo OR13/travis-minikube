@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # install voyager in minikube
-curl -fsSL https://raw.githubusercontent.com/appscode/voyager/7.2.0/hack/deploy/voyager.sh | bash -s ---provider=minikube
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/7.2.0/hack/deploy/voyager.sh | bash -s -- --provider=minikube
 
 # install kong with proxy tls disabled
 helm install --name travis-minikube-kong --set proxy.useTLS=false stable/kong 
