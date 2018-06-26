@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# install voyager in minikube
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/7.2.0/hack/deploy/voyager.sh | bash -s -- --provider=minikube
+
+# install kong with proxy tls disabled
+helm install --name travis-minikube-kong --set proxy.useTLS=false stable/kong 
+
+# wait for kong to setup...
+sleep 200
+
+KONG_ADMIN_API_URL=$(minikube service --url travis-minikube-kong-kong-admin | sed 's,http://,https://,g')
+
+# confirm kong is up
+curl -k $KONG_ADMIN_API_URL/apis/
+
+# install ipfs
+helm install --name travis-minikube-ipfs stable/ipfs
+
+# configure kong to route traffic to ipfs based on host
+curl -k -X POST \
+  --url $KONG_ADMIN_API_URL/apis/ \
+  --data 'name=ipfs' \
+  --data 'hosts=ipfs.travis.minikube' \
+  --data 'upstream_url=http://travis-minikube-ipfs-ipfs.default:5001/'
+
+
+# setup voyager kong ingress
+kubectl apply -f ./minikube-voyager-kong-ipfs/kong-simple-ingress.yaml
+VOYAGER_URL=$(minikube service --url voyager-kong-simple-ingress )
+
+# confirm ipfs is accessible: voyager -> kong -> ipfs
+curl -k $VOYAGER_URL/api/v0/id -H 'Host: ipfs.travis.minikube'
