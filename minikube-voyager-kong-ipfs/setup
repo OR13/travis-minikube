@@ -5,6 +5,10 @@ curl -fsSL https://raw.githubusercontent.com/appscode/voyager/7.2.0/hack/deploy/
 
 # install kong with proxy tls disabled
 helm install --name travis-minikube-kong --set proxy.useTLS=false stable/kong 
+
+# wait for kong to setup...
+sleep 200
+
 KONG_ADMIN_API_URL=$(minikube service --url travis-minikube-kong-kong-admin | sed 's,http://,https://,g')
 
 # confirm kong is up
