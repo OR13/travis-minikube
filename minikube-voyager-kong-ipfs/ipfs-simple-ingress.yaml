@@ -1,0 +1,8 @@
+apiVersion: voyager.appscode.com/v1beta1
+kind: Ingress
+metadata:
+  name: ipfs-simple-ingress
+spec:
+  backend:
+    serviceName: travis-minikube-ipfs-ipfs
+    servicePort: '5001'
