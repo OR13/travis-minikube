@@ -13,7 +13,7 @@ before_script:
 - chmod 700 get_helm.sh
 - sudo ./get_helm.sh
 - helm init
-- ./minikube-voyager-kong-ipfs/install_nsenter.sh
+- ./install_nsenter.sh
 
 script:
 - ./minikube-voyager-kong-ipfs/setup
