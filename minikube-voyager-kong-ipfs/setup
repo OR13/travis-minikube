@@ -11,7 +11,7 @@ curl -k -X POST \
   --data 'hosts=ipfs.travis.minikube' \
   --data 'upstream_url=http://travis-minikube-ipfs-ipfs.default:5001/'
 
-kubectl apply -f ./minikube-voyager-kong-ipfs/kong-simple-ingress.yaml
+kubectl apply -f ./kong-simple-ingress.yaml
 VOYAGER_URL=$(minikube service --url voyager-kong-simple-ingress )
 
 curl -k $VOYAGER_URL/api/v0/id -H 'Host: ipfs.travis.minikube'
